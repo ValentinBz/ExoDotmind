@@ -1,4 +1,4 @@
-const reducerTotalList = (state = [], action) => {
+const reducerTotalList = (state = {}, action) => {
 	switch (action.type) {
 		case 'GET_INFO_FROM_API_SUCCESS':
 			return action.payload;

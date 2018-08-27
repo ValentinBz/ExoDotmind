@@ -8,4 +8,4 @@ export const GET_INFO_FROM_API_FAILURE = 'GET_INFO_FROM_API_FAILURE';
 
 export const LIST_SLICED = 'LIST_SLICED';
 
-export const GET_HISTORY = 'GET_HISTORY';
+export const LOCAL_STORAGE = 'LOCAL_STORAGE';

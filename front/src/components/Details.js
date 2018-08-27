@@ -2,7 +2,9 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import LoadingPage from './Loading';
+import { getLocalStorage } from '../actions/index';
 
 type State = {
   details: Object,
@@ -21,9 +23,11 @@ class Details extends Component<State, Props> {
   props: Props;
   state: State = {
     details: {},
+    storage: {}
   };
 
   Undo() {
+    this.props.getLocalStorage(false, {})
     this.props.history.push(`/`);
   }
 
@@ -33,15 +37,29 @@ class Details extends Component<State, Props> {
     }
   }
 
+  readLocalStorage = () => {
+    if(this.props.BoolStorage.bool) {
+      let newItem = true;
+      let loc = JSON.parse(localStorage.getItem('persist:root'));
+      let obj = JSON.parse(loc.HistoryTab);
+      const tab = obj.find(x => x.id === this.props.BoolStorage.id);
+      return tab
+    } else {
+      return this.state.details
+    }
+  };
+
+
   render() {
-    if(this.state.details) {
+    if(this.state.details || this.props.BoolStorage.bool) {
+      const datas = this.readLocalStorage();
       return (
         <div>
           <Button onClick={this.Undo.bind(this)}>Retour</Button>
-          <h2>{this.state.details.id}</h2>
-          <h2>{this.state.details.title}</h2>
-          <h2>{this.state.details.body}</h2>
-          <h2>{this.state.details.mail}</h2>
+          <h2>{datas.id}</h2>
+          <h2>{datas.title}</h2>
+          <h2>{datas.body}</h2>
+          <h2>{datas.mail}</h2>
         </div>
       );
     } else {
@@ -56,8 +74,13 @@ class Details extends Component<State, Props> {
 
 function mapStateToProps(state) {
   return {
-    Details: state.DetailsId
+    Details: state.DetailsId,
+    BoolStorage: state.BoolStorage,
   }
 }
 
-export default connect(mapStateToProps)(Details);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ getLocalStorage },dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Details);

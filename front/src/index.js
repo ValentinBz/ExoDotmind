@@ -17,9 +17,9 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 export const history = createBrowserHistory();
 
 const persistConfig = {
-  key: 'root4',
+  key: 'root',
   storage: storage,
-  // whitelist: ['HistoryTab'],
+  whitelist: ['HistoryTab'],
   stateReconciler: autoMergeLevel2,
 };
 

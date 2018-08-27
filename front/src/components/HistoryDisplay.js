@@ -11,7 +11,7 @@ type Props = {
 class HistoryDisplay extends Component<Props> {
   props: Props;
 
-  Undo() {
+  Undo = () => {
     this.props.history.push(`/`)
   }
 
@@ -38,8 +38,8 @@ class HistoryDisplay extends Component<Props> {
 
 function mapStateToProps(state) {
   return {
-    historyTab: state.Hist,
+    historyTab: state.HistoryTab,
   }
-}
+};
 
 export default connect(mapStateToProps)(HistoryDisplay);

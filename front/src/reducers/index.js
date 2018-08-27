@@ -1,14 +1,16 @@
 import { combineReducers } from 'redux';
 import reducerTotalList from './reducerTotalList';
 import reducerDetailsId from './reducerDetailsId';
-import reducerHist from './reducerHist';
+import reducerHistory from './reducerHistory';
 import reducerSlicedList from './reducerSlicedList';
+import reducerBoolStorage from './reducerBoolStorage';
 
 const rootReducer = combineReducers({
-	TotalList:reducerTotalList,
 	DetailsId:reducerDetailsId,
-	Hist:reducerHist,
-	SlicedList: reducerSlicedList
+	HistoryTab:reducerHistory,
+	SlicedList: reducerSlicedList,
+	BoolStorage: reducerBoolStorage,
+	TotalList:reducerTotalList,
 });
 
 export default rootReducer;

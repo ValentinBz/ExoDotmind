@@ -3,7 +3,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getTotalList, getId, slicedList } from '../actions/index';
+import { getTotalList, getId, slicedList, getLocalStorage } from '../actions/index';
 import { Container, Button } from 'reactstrap';
 import LoadingPage from './Loading';
 import Pagin from './Pagination';
@@ -50,17 +50,22 @@ class List extends Component<State, Props> {
 	};
 
 	handleHistory = () => {
-		this.props.history.push(`/historyTab`)
+		this.props.history.push(`/historyTab`);
 	};
 
 	handleRowClick = (row) => {
-		this.props.history.push(`/id/${row.id}`)
-		this.props.getId({id: row.id, email: row.email});
+		this.props.history.push(`/id/${row.id}`);
+		const bool = this.readLocalStorage(row.id);
+		if(bool) {
+			this.props.getId({id: row.id, email: row.email});
+		} else {
+			this.props.getLocalStorage(true, row.id)
+		}
 	};
 
 	handleChange = (event) => {
 		const numberParsed = parseInt(event.target.value, 10);
-		this.setState({value: numberParsed})
+		this.setState({value: numberParsed});
 	};
 
 	tabFilter = () => {
@@ -72,10 +77,10 @@ class List extends Component<State, Props> {
 			this.setState({
 				numStart: defaultState.numStart,
 				numStop: this.state.pages
-			})
-			this.props.slicedList(this.props.TotalList, defaultState.numStart, this.state.pages)
+			});
+			this.props.slicedList(this.props.TotalList, defaultState.numStart, this.state.pages);
 		} else {
-			this.getCalc(num)
+			this.getCalc(num);
 		}
 	};
 
@@ -101,6 +106,13 @@ class List extends Component<State, Props> {
 		this.setState({pages: numPerPage},() => this.getPageNumber(1))
 	};
 
+	readLocalStorage = (id) => {
+		let newItem = true;
+		let loc = JSON.parse(localStorage.getItem('persist:root'));
+		JSON.parse(loc.HistoryTab).find(x => {if(x.id === id) newItem = false});
+		return newItem
+	};
+
 	render() {
 
 		let Array = this.props.SlicedList;
@@ -118,7 +130,6 @@ class List extends Component<State, Props> {
 						<DropDown click={this.getNumDropDown.bind(this)}/>
 						<input onChange={this.handleChange} style={{fontSize: '3em'}}/>
 					</div>
-
 					<Pagin clickNum={this.getPageNumber.bind(this)} tabLength={this.props.TotalList.length} pages={this.state.pages}/>
 					<Tables click={this.handleRowClick.bind(this)} datas={Array}/>
 				</Container>
@@ -142,7 +153,7 @@ function mapStateToProps(state) {
 };
 
 function mapDispatchToProps(dispatch) {
-	return bindActionCreators({ getTotalList, getId, slicedList }, dispatch);
+	return bindActionCreators({ getTotalList, getId, slicedList, getLocalStorage }, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(List);
