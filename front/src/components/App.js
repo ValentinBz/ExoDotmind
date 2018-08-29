@@ -10,7 +10,7 @@ type State = {};
 
 type Props = {};
 
-class App extends Component<State, Props> {
+class App extends Component<Props, State> {
 	render() {
 		return (
 			<div>

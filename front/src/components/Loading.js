@@ -1,13 +1,13 @@
-
+// @flow
 import React, {Component} from 'react';
 
 type State = {
 	className: string,
 };
 
-class LoadingPage extends Component<State> {
-	// props: Props;
+type Props = {};
 
+class LoadingPage extends Component<Props, State> {
 	render() {
 		return (
 			<div>

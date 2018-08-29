@@ -11,10 +11,10 @@ import DropDown from './DropDown';
 import Tables from './Tables';
 
 type State = {
-	value: string,
+	value: number,
 	numStart: number,
 	numStop: number,
-	pages:20,
+	pages:number,
 };
 
 type Props = {
@@ -22,6 +22,10 @@ type Props = {
   getId: Function,
   TotalList: Array<Object>,
   history: Object,
+  getLocalStorage: Function,
+  SlicedListArray: Array<Object>,
+  slicedList: Function,
+  HistoryArray: Array<Object>,
 };
 
 const defaultState = {
@@ -29,10 +33,10 @@ const defaultState = {
 	numStop: 20,
 };
 
-class List extends Component<State, Props> {
+class List extends Component<Props, State> {
 	props: Props;
 	state: State = {
-		value: "",
+		value: 0,
 		numStart: defaultState.numStart,
 		numStop: defaultState.numStop,
 		pages:20,
@@ -57,10 +61,16 @@ class List extends Component<State, Props> {
 		this.props.history.push(`/id/${row.id}`);
 		const bool = this.readLocalStorage(row.id);
 		if(bool) {
-			this.props.getId({id: row.id, email: row.email});
+			this.props.getId(row.id);
 		} else {
 			this.props.getLocalStorage(true, row.id)
 		}
+	};
+
+	readLocalStorage = (id) => {
+		let newItem = true;
+		this.props.HistoryArray.find(x => {if(x.id === id) newItem = false});
+		return newItem
 	};
 
 	handleChange = (event) => {
@@ -86,7 +96,7 @@ class List extends Component<State, Props> {
 
 	getCalc = (num) =>  {
 		if(this.state.pages !== 20) {
-			const mult = this.state.pages *  (num - 1);
+			const mult = this.state.pages * (num - 1);
 			this.setState({
 				numStart: defaultState.numStart + mult,
 				numStop: this.state.pages + mult
@@ -102,20 +112,12 @@ class List extends Component<State, Props> {
 		}
 	}
 
-	getNumDropDown = (numPerPage) => {
+	getNumDropDown = (numPerPage: number) => {
 		this.setState({pages: numPerPage},() => this.getPageNumber(1))
 	};
 
-	readLocalStorage = (id) => {
-		let newItem = true;
-		let loc = JSON.parse(localStorage.getItem('persist:root'));
-		JSON.parse(loc.HistoryTab).find(x => {if(x.id === id) newItem = false});
-		return newItem
-	};
-
 	render() {
-
-		let Array = this.props.SlicedList;
+		let Array = this.props.SlicedListArray;
 		if(this.state.value) {
 			Array = this.tabFilter();
 		}
@@ -148,7 +150,8 @@ function mapStateToProps(state) {
 	return {
 		TotalList: state.TotalList,
 		Details: state.DetailsId,
-		SlicedList: state.SlicedList,
+		SlicedListArray: state.SlicedList,
+		HistoryArray: state.HistoryTab
 	}
 };
 
@@ -157,14 +160,3 @@ function mapDispatchToProps(dispatch) {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(List);
-/*
-let persistStorage = JSON.parse(localStorage.getItem('persist:root'));
-console.log('persistStorage : ', persistStorage)
-console.log('persistStorage.historyTab : ', persistStorage.historyTab)
-
-if(persistStorage.length !== 0) {
-	 for(let i = 0; i < persistStorage.length; i++) {
-		 console.log('persistStorage.historyTab : ', persistStorage.historyTab)
-	 }
-}
-*/

@@ -1,3 +1,4 @@
+// @flow
 
 import React, { Component } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
@@ -18,7 +19,7 @@ export default class Tables extends Component<Props> {
 
     return (
         <div>
-          <BootstrapTable data={this.props.datas} striped={true} hover={true} options={options}>
+          <BootstrapTable bodyStyle={{fontSize: '2em'}} headerStyle={{ fontSize: '2em' }} data={this.props.datas} striped={true} hover={true} options={options}>
             <TableHeaderColumn dataField="id" isKey={true} dataAlign="center">ID</TableHeaderColumn>
             <TableHeaderColumn dataField="name" dataAlign="center">Name</TableHeaderColumn>
             <TableHeaderColumn dataField="email" dataAlign="center">email</TableHeaderColumn>

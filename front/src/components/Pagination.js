@@ -1,15 +1,19 @@
+// @flow
+
 import React, { Component } from 'react';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
 type Props = {
-
+  pages: number,
+  clickNum: Function,
+  tabLength: number,
 };
 
 type State = {
   num: number,
 };
 
-export default class Pagin extends Component<State, Props> {
+export default class Pagin extends Component<Props, State> {
   props: Props;
   state: State = {
     num:1
@@ -19,7 +23,7 @@ export default class Pagin extends Component<State, Props> {
      return this.props.tabLength / this.props.pages
   }
 
-  getPage(tall) {
+  getPage(tall: number) {
     let tab = [];
     for(let i = 0; i < tall; i++) {
       tab.push(i+1);
